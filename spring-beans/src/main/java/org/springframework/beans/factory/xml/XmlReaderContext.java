@@ -34,7 +34,7 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.lang.Nullable;
 
 /**
- * Extension of {@link org.springframework.beans.factory.parsing.ReaderContext},
+ * {@link org.springframework.beans.factory.parsing.ReaderContext} 的子类,
  * specific to use with an {@link XmlBeanDefinitionReader}. Provides access to the
  * {@link NamespaceHandlerResolver} configured in the {@link XmlBeanDefinitionReader}.
  *

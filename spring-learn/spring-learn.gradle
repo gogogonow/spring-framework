@@ -1,0 +1,18 @@
+plugins {
+    id 'java'
+}
+
+group 'org.springframework'
+version '6.0.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    api(project(":spring-beans"))
+    api(project(":spring-core"))
+    optional(project(":spring-aop"))
+    optional(project(":spring-context"))
+    optional(project(":spring-oxm"))
+}

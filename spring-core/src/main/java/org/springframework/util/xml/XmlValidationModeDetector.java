@@ -81,8 +81,8 @@ public class XmlValidationModeDetector {
 
 
 	/**
-	 * Detect the validation mode for the XML document in the supplied {@link InputStream}.
-	 * Note that the supplied {@link InputStream} is closed by this method before returning.
+	 * 基于 {@link InputStream} 获取校验模式.
+	 * 校验前 {@link InputStream} 需要为关闭状态.
 	 * @param inputStream the InputStream to parse
 	 * @throws IOException in case of I/O failure
 	 * @see #VALIDATION_DTD
@@ -94,14 +94,22 @@ public class XmlValidationModeDetector {
 			boolean isDtdValidated = false;
 			String content;
 			while ((content = reader.readLine()) != null) {
+
+				// 获取筛掉前导后导符号的content
 				content = consumeCommentTokens(content);
+
+				// 如果当前处于前导符号后或者内容为空则继续查找
 				if (this.inComment || !StringUtils.hasText(content)) {
 					continue;
 				}
+
+				// 内容有Doctype标记，返回VALIDATION_DTD
 				if (hasDoctype(content)) {
 					isDtdValidated = true;
 					break;
 				}
+
+				// 内容有XML的<标记，返回VALIDATION_XSD
 				if (hasOpeningTag(content)) {
 					// End of meaningful data...
 					break;
@@ -139,12 +147,12 @@ public class XmlValidationModeDetector {
 	}
 
 	/**
-	 * Consume all leading and trailing comments in the given String and return
-	 * the remaining content, which may be empty since the supplied content might
-	 * be all comment data.
+	 * 消耗掉所有前导和尾随注释在给定的字符串后返回存留的内容，可能出现都是comment.
 	 */
 	@Nullable
 	private String consumeCommentTokens(String line) {
+
+		// 既不包含前导也不包含尾导，则全部是内容，直接返回
 		int indexOfStartComment = line.indexOf(START_COMMENT);
 		if (indexOfStartComment == -1 && !line.contains(END_COMMENT)) {
 			return line;
@@ -152,6 +160,8 @@ public class XmlValidationModeDetector {
 
 		String result = "";
 		String currLine = line;
+
+		// 有前导
 		if (indexOfStartComment >= 0) {
 			result = line.substring(0, indexOfStartComment);
 			currLine = line.substring(indexOfStartComment);
@@ -166,31 +176,34 @@ public class XmlValidationModeDetector {
 	}
 
 	/**
-	 * Consume the next comment token, update the "inComment" flag
-	 * and return the remaining content.
+	 * 消除下一个标记,更新“inComment”标记,并返回剩余的内容
+	 * inComment表示是否在某个标记中，前面有前导标记
+	 * 在前导标记后，返回endComment，反之startComment
 	 */
 	@Nullable
 	private String consume(String line) {
+		// 当前已经有前导，则获取后导索引；当前已经有后导，则获取下一个前导索引
 		int index = (this.inComment ? endComment(line) : startComment(line));
 		return (index == -1 ? null : line.substring(index));
 	}
 
 	/**
-	 * Try to consume the {@link #START_COMMENT} token.
+	 * 获取 {@link #START_COMMENT} token在当前字符串的索引.
 	 * @see #commentToken(String, String, boolean)
 	 */
 	private int startComment(String line) {
 		return commentToken(line, START_COMMENT, true);
 	}
 
+	/**
+	 * 获取 {@link #END_COMMENT} token在当前字符串的索引.
+	 */
 	private int endComment(String line) {
 		return commentToken(line, END_COMMENT, false);
 	}
 
 	/**
-	 * Try to consume the supplied token against the supplied content and update the
-	 * in comment parse state to the supplied value. Returns the index into the content
-	 * which is after the token or -1 if the token is not found.
+	 * 根据传入的符号（token），如果当前字符串包含，则更新inComment标记并返回包含符号本身长度在字符串中的索引位置
 	 */
 	private int commentToken(String line, String token, boolean inCommentIfPresent) {
 		int index = line.indexOf(token);

@@ -1,10 +1,12 @@
-package com.twei.beandefinition;
+package com.twei.beandefinition.register;
 
-import com.twei.beandefinition.bean.Person;
+import com.twei.beandefinition.po.Person;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
 
 /**
  * 注释bean定义演示
@@ -12,14 +14,16 @@ import org.springframework.stereotype.Component;
  * @author 61404
  * @date 2021/10/27
  */
-@Import(AnnotationBeanDefinitionDemo.class)
+@Import(AnnotationBeanDefinitionDemo.Config.class)
 public class AnnotationBeanDefinitionDemo {
 	public static void main(String[] args) {
 		AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
-		applicationContext.register(Config.class);
+		applicationContext.register(AnnotationBeanDefinitionDemo.class);
 		applicationContext.refresh();
-		Person bean = applicationContext.getBean("ppp", Person.class);
-		System.out.println(bean.toString());
+		Map<String, Config> cfgBeans = applicationContext.getBeansOfType(Config.class);
+		Map<String, Person> personBeans = applicationContext.getBeansOfType(Person.class);
+		System.out.println(cfgBeans);
+		System.out.println(personBeans);
 		applicationContext.close();
 	}
 

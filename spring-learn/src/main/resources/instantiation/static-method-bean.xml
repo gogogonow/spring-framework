@@ -3,8 +3,5 @@
 		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 xsi:schemaLocation="http://www.springframework.org/schema/beans
          http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
-		<bean id="person" class="com.twei.beandefinition.bean.Person">
-			<property name="age" value="1"/>
-			<property name="name" value="Java"/>
-		</bean>
+		<bean id="person-by-static-method" class="com.twei.beandefinition.po.Person" factory-method="createPerson"/>
 </beans>

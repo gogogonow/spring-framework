@@ -1,4 +1,4 @@
-package com.twei.beandefinition.bean;
+package com.twei.beandefinition.po;
 
 /**
  * 人
@@ -9,6 +9,13 @@ package com.twei.beandefinition.bean;
 public class Person {
 	private String name;
 	private Integer age;
+
+	public static Person createPerson() {
+		Person person = new Person();
+		person.setAge(11);
+		person.setName("Jack");
+		return person;
+	}
 
 	public String getName() {
 		return name;

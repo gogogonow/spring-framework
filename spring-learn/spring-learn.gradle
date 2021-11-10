@@ -15,4 +15,6 @@ dependencies {
     optional(project(":spring-aop"))
     optional(project(":spring-context"))
     optional(project(":spring-oxm"))
+    // https://mvnrepository.com/artifact/javax.annotation/javax.annotation-api
+    implementation group: 'javax.annotation', name: 'javax.annotation-api', version: '1.3.2'
 }

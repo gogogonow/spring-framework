@@ -1,6 +1,6 @@
-package com.twei.beandefinition;
+package com.twei.beandefinition.meta;
 
-import com.twei.beandefinition.bean.Person;
+import com.twei.beandefinition.po.Person;
 import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
